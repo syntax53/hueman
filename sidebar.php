@@ -6,12 +6,18 @@
 
 	<div class="sidebar s1">
 		
-		<div class="sidebar-toggle-button"><a class="sidebar-toggle" title="<?php _e('Expand Sidebar','hueman'); ?>"><i class="fa icon-sidebar-toggle"></i></a></div>
+		<a class="sidebar-toggle" title="<?php _e('Expand Sidebar','hueman'); ?>"><i class="fa icon-sidebar-toggle"></i></a>
 		
 		<div class="sidebar-content">
+			
 			<?php if ( ot_get_option('sidebar-top') != 'off' ): ?>
-				<div class="sidebar-top group"><?php alx_social_links() ; ?></div>
+			<div class="sidebar-top group">
+				<p><?php _e('Follow:','hueman'); ?></p>
+				<?php alx_social_links() ; ?>
+			</div>
 			<?php endif; ?>
+			
+			<?php if ( ot_get_option( 'post-nav' ) == 's1') { get_template_part('inc/post-nav'); } ?>
 			
 			<?php if( is_page_template('page-templates/child-menu.php') ): ?>
 			<ul class="child-menu group">
@@ -21,7 +27,6 @@
 			
 			<?php dynamic_sidebar($sidebar); ?>
 			
-            <?php if ( ot_get_option( 'post-nav' ) == 's1') { get_template_part('inc/post-nav'); } ?>
 		</div><!--/.sidebar-content-->
 		
 	</div><!--/.sidebar-->

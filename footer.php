@@ -3,7 +3,16 @@
 		</div><!--/.container-inner-->
 	</div><!--/.container-->
 
-	<footer id="footer">	
+	<footer id="footer">
+		
+		<?php if ( ot_get_option('footer-ads') == 'on' ): ?>
+		<section class="container" id="footer-ads">
+			<div class="container-inner">
+				<?php dynamic_sidebar( 'footer-ads' ); ?>
+			</div><!--/.container-inner-->
+		</section><!--/.container-->
+		<?php endif; ?>
+		
 		<?php // footer widgets
 			$total = 4;
 			if ( ot_get_option( 'footer-widgets' ) != '' ) {
@@ -62,11 +71,17 @@
 						
 						<div id="copyright">
 							<?php if ( ot_get_option( 'copyright' ) ): ?>
-								<p><?php echo ot_get_option( 'copyright' ); ?></p>
+								<p><?php echo esc_attr( ot_get_option( 'copyright' ) ); ?></p>
 							<?php else: ?>
-								<p><?php //bloginfo(); ?>Abington School District &copy; <?php echo date( 'Y' ); ?>. <?php _e( 'All Rights Reserved.', 'hueman' ); ?><br><span style="font-size:0.7em; font-style:italic;">Abington School District is not responsible for any Internet content outside of this website. Links to external sites are included on some parts of the Abington School District site as a service to visitors. Inclusion of external links does not imply endorsement or approval of external content.</span></p>
+								<p><?php bloginfo(); ?> &copy; <?php echo date( 'Y' ); ?>. <?php _e( 'All Rights Reserved.', 'hueman' ); ?></p>
 							<?php endif; ?>
 						</div><!--/#copyright-->
+						
+						<?php if ( ot_get_option( 'credit' ) != 'off' ): ?>
+						<div id="credit">
+							<p><?php _e('Powered by','hueman'); ?> <a href="http://wordpress.org" rel="nofollow">WordPress</a>. <?php _e('Theme by','hueman'); ?> <a href="http://alxmedia.se" rel="nofollow">Alx</a>.</p>
+						</div><!--/#credit-->
+						<?php endif; ?>
 						
 					</div>
 					
@@ -82,6 +97,7 @@
 	</footer><!--/#footer-->
 
 </div><!--/#wrapper-->
+
 <?php wp_footer(); ?>
 </body>
 </html>

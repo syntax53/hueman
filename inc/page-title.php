@@ -1,21 +1,9 @@
-<?php //: Page <?php echo "$paged of $wp_query->max_num_pages"; ?>
-<?php $current_blog_id = asd_custom_identify_site(); ?>
 <div class="page-title pad group">
 
 	<?php if ( is_home() ) : ?>
-		<?php $paged = (get_query_var('paged')) ? get_query_var('paged') : 1;  ?>
-		<?php if (ot_get_option('featured-posts-include') && $paged == 1): ?>
-        	<?php if ($current_blog_id == 'main'): ?>
-				<h2><a href="/category/news/">News</a></h2>
-            <?php else: ?>
-            	<h2><a href="/category/featured_articles/">Featured Articles</a></h2>
-            <?php endif; ?>
-        <?php elseif ($paged == 1): ?>
-        	<h2><?php echo alx_blog_title(); ?></h2>
-        <?php else: ?>
-            <h2>Past <?php echo alx_blog_title(); ?> Postings</h2>
-        <?php endif; ?>
-	<?php elseif ( is_single() && get_post_type() != 'gce_feed' ): ?>
+		<h2><?php echo alx_blog_title(); ?></h2>
+
+	<?php elseif ( is_single() ): ?>
 		<ul class="meta-single group">
 			<li class="category"><?php the_category(' <span>/</span> '); ?></li>
 			<?php if ( comments_open() && ( ot_get_option( 'comment-count' ) != 'off' ) ): ?>
@@ -23,14 +11,21 @@
 			<?php endif; ?>
 		</ul>
 		
-	<?php elseif ( is_page() || get_post_type() == 'gce_feed' ): ?>
+	<?php elseif ( is_page() ): ?>
 		<h2><?php echo alx_page_title(); ?></h2>
 
 	<?php elseif ( is_search() ): ?>
 		<h1>
 			<?php if ( have_posts() ): ?><i class="fa fa-search"></i><?php endif; ?>
 			<?php if ( !have_posts() ): ?><i class="fa fa-exclamation-circle"></i><?php endif; ?>
-			<?php $search_count = $wp_query->found_posts; echo $search_count; ?> <?php _e('Search results','hueman'); ?></h1>
+			<?php $search_results=$wp_query->found_posts;
+				if ($search_results==1) {
+					echo $search_results.' '.__('Search result','hueman');
+				} else {
+					echo $search_results.' '.__('Search results','hueman');
+				}
+			?>
+		</h1>
 		
 	<?php elseif ( is_404() ): ?>
 		<h1><i class="fa fa-exclamation-circle"></i><?php _e('Error 404.','hueman'); ?> <span><?php _e('Page not found!','hueman'); ?></span></h1>

@@ -11,22 +11,24 @@
 			<?php if ( !have_posts() ): ?>
 				<?php _e('Please try another search:','hueman'); ?>
 			<?php endif; ?>
-            <?php $q = get_search_query(); if (asd_custom_identify_site() == 'main' && (stripos($q, 'policy') !== FALSE || stripos($q, 'policies') !== FALSE)): ?>
-            	<div style="font-size:1.0em; font-style:italic; margin:5px 0 0 0; color:#C30003;">If you are looking for board policies and/or administrative procedures, <a href="/policies/">click here</a>.</div>
-	        <?php endif; ?>
 			<div class="search-again">
 				<?php get_search_form(); ?>
 			</div>
 		</div>
-        
-        
+		
 		<?php if ( have_posts() ) : ?>
 		
+			<?php if ( ot_get_option('blog-standard') == 'on' ): ?>
+				<?php while ( have_posts() ): the_post(); ?>
+					<?php get_template_part('content-standard'); ?>
+				<?php endwhile; ?>
+			<?php else: ?>
 			<div class="post-list group">
 				<?php $i = 1; echo '<div class="post-row">'; while ( have_posts() ): the_post(); ?>
-				<?php get_template_part('content'); ?>
-				<?php if($i % 3 == 0) { echo '</div><div class="post-row">'; } $i++; endwhile; echo '</div>'; ?>
+					<?php get_template_part('content'); ?>
+				<?php if($i % 2 == 0) { echo '</div><div class="post-row">'; } $i++; endwhile; echo '</div>'; ?>
 			</div><!--/.post-list-->
+			<?php endif; ?>
 		
 			<?php get_template_part('inc/pagination'); ?>
 			
