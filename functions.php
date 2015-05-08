@@ -6,6 +6,87 @@
 	// Use a child theme instead of placing custom functions here
 	// http://codex.wordpress.org/Child_Themes
 
+if (!function_exists('asd_custom_identify_site')) {
+	function asd_custom_identify_site() {
+		$ret = 1; if (is_multisite()) { $ret = get_current_blog_id(); }
+		return $ret;
+	}
+}
+
+//custom excerpt length
+if (!function_exists('asd_custom_excerpt_length')) {
+	function asd_custom_excerpt_length($length=0){
+	
+		$excerpt = do_shortcode( get_the_content() );
+		
+		$excerpt = preg_replace('/(<video[^>]*>)(.*)(<\\/video>)/i', '', $excerpt);
+		$excerpt = preg_replace('/<style[^>]*>[^<]+<\/style>/i', '', $excerpt);
+		$excerpt = preg_replace('/(<[^>]+) style="[^"]+"/i', '$1', $excerpt);
+		$excerpt = preg_replace('/(<[^>]+) style=\'[^\']+\'/i', '$1', $excerpt);
+		$excerpt = preg_replace("/(https?:\\/\\/[^\\s<\"]+)/i", '<span class="break_any_word">$1</span>', $excerpt);
+		
+		$excerpt = nl2br($excerpt);
+		$excerpt = strip_tags($excerpt, '<br><li><p>');
+		
+		$excerpt = str_ireplace('</br>', '', $excerpt);
+		$excerpt = str_ireplace(array('<br/>','<br />'), '<br>', $excerpt);
+		while (stripos($excerpt, '<br><br>') !== FALSE) { $excerpt = str_ireplace('<br><br>', '<br>', $excerpt); }
+		$excerpt = str_ireplace(array('<br>'), array(' '), $excerpt);
+		
+		$excerpt = str_ireplace(array('<li>','</li>'), array(', ', ''), $excerpt);
+		$excerpt = str_ireplace(array('<p>', '<p >','</p>'), array(' ', ' ', ''), $excerpt);
+		
+		while (substr($excerpt, 0, 1) == ',') { $excerpt = substr($excerpt, 1); }
+		
+		$excerpt = trim($excerpt);
+		
+		$excerpt = preg_replace('/(http:\/\/([^\s]*))/i', '', $excerpt);
+		
+		while(substr($excerpt, 0, 1) == '.') { $excerpt = substr($excerpt, 1); }
+		
+		$excerpt= balanceTags( $excerpt, true );
+		
+		if ($length > 0 && str_word_count($excerpt) > $length) {
+			$permalink = get_permalink();
+			$excerpt = asd_limit_words($excerpt, $length, '');
+			$excerpt = $excerpt.'... <a href="'.$permalink.'">more</a>';
+		}
+		
+		return $excerpt;
+	}
+}
+
+if (!function_exists('asd_limit_words')) {
+	function asd_limit_words($string, $word_limit, $dotdotdot=TRUE) {
+		$words = explode(" ",$string);
+		$ret = implode(" ",array_splice($words,0,$word_limit));
+		$ret = preg_replace('/<[^>]*$/', '', $ret);
+		if ($ret != $string) {
+			$ret = balanceTags( $ret, true );
+			if ($dotdotdot) $ret .= '...';
+		}
+		return $ret;
+	}
+}
+
+if (!function_exists('asd_hueman_dynamic_editor_styles')) {
+	function asd_hueman_dynamic_editor_styles($mce_css) {
+		if ( ot_get_option('dynamic-styles') != 'off' ) {
+			$font = htmlspecialchars(ot_get_option( 'font' ));
+			if (!empty( $font )) {
+				if ( ! empty( $mce_css ) ) $mce_css .= ',';
+				$mce_css .= get_template_directory_uri() . '/editor-style-dynamic.php?font='.urlencode($font);
+			}
+		}
+		return $mce_css;
+	}
+	add_filter( 'mce_css', 'asd_hueman_dynamic_editor_styles' );
+}
+
+/**
+ * Custom CSS for WYSIWYG Editor – TinyMCE
+*/
+add_editor_style(get_template_directory_uri().'/editor-style.css');
 
 /* ------------------------------------------------------------------------- *
  *  OptionTree framework integration: Use in theme mode
@@ -73,7 +154,8 @@ if ( ! function_exists( 'alx_setup' ) ) {
 		add_theme_support( 'post-thumbnails' );
 		
 		// Enable post format support
-		add_theme_support( 'post-formats', array( 'audio', 'aside', 'chat', 'gallery', 'image', 'link', 'quote', 'status', 'video' ) );
+		add_theme_support( 'post-formats', array( 'audio', 'aside', 'gallery', 'image', 'link', 'quote' ) );
+		//original: array( 'audio', 'aside', 'chat', 'gallery', 'image', 'link', 'quote', 'status', 'video' )
 		
 		// Declare WooCommerce support
 		add_theme_support( 'woocommerce' );
@@ -136,15 +218,45 @@ add_action( 'wp_enqueue_scripts', 'alx_scripts' );
 if ( ! function_exists( 'alx_styles' ) ) {
 	
 	function alx_styles() {
+		$layout = alx_layout_class();
 		wp_enqueue_style( 'style', get_stylesheet_uri() );
-		if ( ot_get_option('responsive') != 'off' ) { wp_enqueue_style( 'responsive', get_template_directory_uri().'/responsive.css' ); }
+		if ( ot_get_option('responsive') != 'off' ) {
+			if ( ot_get_option('responsive-collapse') == 'on' ) {
+				wp_enqueue_style( 'responsive-collapse', get_template_directory_uri().'/responsive-collapse.css' );
+			} else {
+				wp_enqueue_style( 'responsive', get_template_directory_uri().'/responsive.css' );
+			}
+			if ( ot_get_option('responsive-collapse') == 'on' || (
+					( $layout == 'col-3cm' ) || ( $layout == 'col-3cl' ) || ( $layout == 'col-3cr' ) 
+				) ) {
+				wp_register_script( 'asd-custom-pulse-toggle', get_template_directory_uri() . '/js/asd-custom-pulse-toggle.js', 
+					array( 	'jquery', 
+							'jquery-ui-core', 
+							'jquery-effects-core', 
+							'jquery-effects-pulsate'
+						) 
+				);
+				wp_enqueue_script( 'asd-custom-pulse-toggle' );
+			}
+		}
 		if ( ot_get_option('custom') == 'on' ) { wp_enqueue_style( 'custom', get_template_directory_uri().'/custom.css' ); }
-		wp_enqueue_style( 'font-awesome', get_template_directory_uri().'/fonts/font-awesome.min.css' );
+		if (!wp_style_is('font-awesome', 'enqueued')) {
+			wp_enqueue_style( 'font-awesome', get_template_directory_uri().'/fonts/font-awesome.min.css' );
+		}
+		
+		$current_blog = asd_custom_identify_site();
+		if ( file_exists( get_template_directory() . "/sites/$current_blog/style.css" ) ) {	
+			wp_enqueue_style( "asd_custom_{$current_blog}_style", get_template_directory_uri(). "/sites/$current_blog/style.css" );
+		}
 	}
 	
 }
 add_action( 'wp_enqueue_scripts', 'alx_styles' );
 
+/* do specific functions.php for specific blogs */
+if ( file_exists( get_template_directory() . '/sites/'.asd_custom_identify_site().'/functions.php' ) ) {
+	require( get_template_directory() . '/sites/'.asd_custom_identify_site().'/functions.php' );
+}
 
 /*  Register custom sidebars
 /* ------------------------------------ */
@@ -355,11 +467,16 @@ if ( ! function_exists( 'alx_page_title' ) ) {
 
 		$heading = esc_attr( get_post_meta($post->ID,'_heading',true) );
 		$subheading = esc_attr( get_post_meta($post->ID,'_subheading',true) );
-		$title = $heading?$heading:the_title();
+		$title = $heading?$heading:the_title(NULL, NULL, FALSE);
 		if($subheading) {
 			$title = $title.' <span>'.$subheading.'</span>';
 		}
-
+		if(function_exists('bcn_display')) {
+			$bcn = bcn_display(true);
+			if (strlen($bcn) > 1) {
+				$title = '<span class="breadcrumbs">'.$bcn.' &gt; </span>'.$title;
+			}
+		}
 		return $title;
 	}
 	
@@ -405,7 +522,11 @@ if ( ! function_exists( 'alx_related_posts' ) ) {
 			'ignore_sticky_posts'		=> 1,
 			'orderby'					=> 'rand',
 			'post__not_in'				=> array($post->ID),
-			'posts_per_page'			=> 3
+			'posts_per_page'			=> 3,
+			'date_query'    			=> array(
+											'column'  => 'post_date',
+											'after'   => '-1 year'
+										)
 		);
 		// Related by categories
 		if ( ot_get_option('related-posts') == 'categories' ) {
@@ -791,19 +912,19 @@ if ( ! function_exists( 'alx_plugins' ) ) {
 					'force_deactivation'=> false,
 				),
 				array(
-					'name' 				=> 'Responsive Lightbox',
+					'name' 				=> 'Responsive Lightbox by dFactory',
 					'slug' 				=> 'responsive-lightbox',
 					'required'			=> false,
 					'force_activation' 	=> false,
 					'force_deactivation'=> false,
-				),
+				)/*,
 				array(
 					'name' 				=> 'Contact Form 7',
 					'slug' 				=> 'contact-form-7',
 					'required'			=> false,
 					'force_activation' 	=> false,
 					'force_deactivation'=> false,
-				)
+				)*/
 			);	
 			tgmpa( $plugins );
 		}

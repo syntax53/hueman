@@ -96,6 +96,15 @@ function custom_theme_options() {
 			'type'		=> 'on-off',
 			'section'	=> 'general'
 		),
+		// General: Responsive Layout - Collapsable
+		array(
+			'id'		=> 'responsive-collapse',
+			'label'		=> 'Responsive Layout - Collapsable 1st Sidebar',
+			'desc'		=> '1st sidebar will also collapse when width is too small (2nd sidebar will always)',
+			'std'		=> 'off',
+			'type'		=> 'on-off',
+			'section'	=> 'general'
+		),
 		// General: Mobile Sidebar
 		array(
 			'id'		=> 'mobile-sidebar-hide',
@@ -203,6 +212,15 @@ function custom_theme_options() {
 			'label'		=> 'Featured Category',
 			'desc'		=> 'By not selecting a category, it will show your latest post(s) from all categories',
 			'type'		=> 'category-select',
+			'section'	=> 'blog'
+		),
+		// blog: randomize
+		array (
+			'id' => 'featured-posts-randomize',
+			'label' => 'Randomize Featured Posts',
+			'desc' => 'Randomize the order of the featured posts slider',
+			'std'		=> 'on',
+			'type'		=> 'on-off',
 			'section'	=> 'blog'
 		),
 		// Blog: Featured Category Count
@@ -326,7 +344,7 @@ function custom_theme_options() {
 					'label' => 'Below content'
 				)
 			)
-		),
+		),/*
 		// Header: Ads
 		array(
 			'id'		=> 'header-ads',
@@ -335,7 +353,7 @@ function custom_theme_options() {
 			'std'		=> 'off',
 			'type'		=> 'on-off',
 			'section'	=> 'header'
-		),
+		),*/
 		// Header: Custom Logo
 		array(
 			'id'		=> 'custom-logo',
@@ -360,7 +378,7 @@ function custom_theme_options() {
 			'desc'		=> 'Upload a header image. This will disable header title/logo and description.',
 			'type'		=> 'upload',
 			'section'	=> 'header'
-		),
+		),/*
 		// Footer: Ads
 		array(
 			'id'		=> 'footer-ads',
@@ -369,7 +387,7 @@ function custom_theme_options() {
 			'std'		=> 'off',
 			'type'		=> 'on-off',
 			'section'	=> 'footer'
-		),
+		),*/
 		// Footer: Widget Columns
 		array(
 			'id'		=> 'footer-widgets',
@@ -1007,7 +1025,7 @@ function custom_theme_options() {
 				),
 				array( 
 					'value' => 'droid-serif',
-					'label' => 'Droid Serif, Latin'
+					'label' => 'Droid Serif, Latin (Self-hosted)'
 				),
 				array( 
 					'value' => 'source-sans-pro',
@@ -1092,7 +1110,7 @@ function custom_theme_options() {
 			'id'			=> 'container-width',
 			'label'			=> 'Website Max-width',
 			'desc'			=> 'Max-width of the container. If you use 2 sidebars, your container should be at least 1200px.<br /><i>Note: For 720px content (default) use <strong>1380px</strong> for 2 sidebars and <strong>1120px</strong> for 1 sidebar. If you use a combination of both, try something inbetween.</i>',
-			'std'			=> '1380',
+			'std'			=> '1150',
 			'type'			=> 'numeric-slider',
 			'section'		=> 'styling',
 			'min_max_step'	=> '1024,1600,1'
@@ -1100,18 +1118,18 @@ function custom_theme_options() {
 		// Styling: Sidebar Padding
 		array(
 			'id'		=> 'sidebar-padding',
-			'label'		=> 'Sidebar Width',
+			'label'		=> 'Sidebar Padding',
 			'type'		=> 'radio',
-			'std'		=> '30',
+			'std'		=> '10',
 			'section'	=> 'styling',
 			'choices'	=> array(
 				array( 
-					'value' => '30',
-					'label' => '280px primary, 200px secondary (30px padding)'
+					'value' => '10',
+					'label' => '10px padding'
 				),
 				array( 
 					'value' => '20',
-					'label' => '300px primary, 220px secondary (20px padding)'
+					'label' => '20px padding'
 				)
 			)
 		),
@@ -1154,7 +1172,7 @@ function custom_theme_options() {
 		// Styling: Header Menu Background
 		array(
 			'id'		=> 'color-header-menu',
-			'label'		=> 'Header Menu Background',
+			'label'		=> 'Header Menu and Widget Title Background',
 			'std'		=> '',
 			'type'		=> 'colorpicker',
 			'section'	=> 'styling',

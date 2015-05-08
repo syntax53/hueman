@@ -73,7 +73,7 @@
 							<?php if ( ot_get_option( 'copyright' ) ): ?>
 								<p><?php echo esc_attr( ot_get_option( 'copyright' ) ); ?></p>
 							<?php else: ?>
-								<p><?php bloginfo(); ?> &copy; <?php echo date( 'Y' ); ?>. <?php _e( 'All Rights Reserved.', 'hueman' ); ?></p>
+								<p><?php bloginfo('name'); ?> &copy; <?php echo date( 'Y' ); ?>. <?php _e( 'All Rights Reserved.', 'hueman' ); ?><br><span style="font-size:0.7em; font-style:italic;"><?php bloginfo('name'); ?> is not responsible for any Internet content outside of this website. Links to external sites are included on some parts of the <?php bloginfo('name'); ?> site as a service to visitors. Inclusion of external links does not imply endorsement or approval of external content.</span></p>
 							<?php endif; ?>
 						</div><!--/#copyright-->
 						
