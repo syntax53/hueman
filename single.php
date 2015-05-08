@@ -10,9 +10,12 @@
 			<article <?php post_class(); ?>>	
 				<div class="post-inner group">
 					
-					<h1 class="post-title"><?php the_title(); ?></h1>
-					<p class="post-byline"><?php _e('by','hueman'); ?> <?php the_author_posts_link(); ?> &middot; <?php the_time(get_option('date_format')); ?></p>
-					
+					<?php if ( !has_post_format( 'aside' ) && (!isset($_GET['post_format']) || $_GET['post_format'] != 'aside') && get_post_type() != 'gce_feed'): ?>
+                    	<h1 class="post-title"><?php the_title(); ?></h1>
+                    <?php endif; ?>
+					<?php if (get_post_type() != 'gce_feed'): ?>
+	                    <p class="post-byline">Posted <?php the_time(get_option('date_format')); ?></p>
+					<?php endif; ?>
 					<?php if( get_post_format() ) { get_template_part('inc/post-formats'); } ?>
 					
 					<div class="clear"></div>

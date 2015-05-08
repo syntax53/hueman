@@ -2,15 +2,15 @@
 
 <div class="sidebar s2">
 	
-	<a class="sidebar-toggle" title="<?php _e('Expand Sidebar','hueman'); ?>"><i class="fa icon-sidebar-toggle"></i></a>
+	<div class="sidebar-toggle-button"><a class="sidebar-toggle" title="<?php _e('Expand Sidebar','hueman'); ?>"><i class="fa icon-sidebar-toggle"></i></a></div>
 	
 	<div class="sidebar-content">
 		
-		<?php if ( ot_get_option('sidebar-top') != 'off' ): ?>
-		<div class="sidebar-top group">
-			<p><?php _e('More','hueman'); ?></p>
+        <?php if ( ot_get_option('sidebar-top') != 'off' ): ?>
+		<div class="sidebar-top group"><p>&nbsp;</p>
+			<!--EDITED <p><?php _e('More','hueman'); ?></p> -->
 		</div>
-		<?php endif; ?>
+        <?php endif; ?>
 		
 		<?php if ( ot_get_option( 'post-nav' ) == 's2') { get_template_part('inc/post-nav'); } ?>
 		

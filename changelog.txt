@@ -1,35 +1,6 @@
   Theme : Hueman
-Version : 2.2.3
+Version : 2.1.9
  Author : Alexander "Alx" Agnarson - http://alxmedia.se
-
-April 22 2015 - 2.2.3
-===========================================================
-- Updated to OptionTree 2.5.4
-- XSS security fixes
-- Removed tracking code field
-- Added additional Google fonts
-
-February 6 2015 - 2.2.2
-===========================================================
-- Fixed dropdown menus for iPhone
-- Fixed toggle sidebars for iPhone and iPad
-- Fixed typos in functions.php - @jaylinski (via GitHub)
-- Added several missing wp_reset_postdata - @Marco Almeida
-- Optimized search results - @Marco Almeida
-- Updated language files
-- Updated to jPlayer 2.9.2
-
-January 29 2015 - 2.2.1
-===========================================================
-- Fixed double title tags
-
-December 31 2014 - 2.2.0
-===========================================================
-- Added WP 4.1 title tag support
-- Added standard blog list option
-- Added header and footer widget ads areas
-- Moved disable sidebar top option to sidebars section
-- Updated to OptionTree 2.4.6
 
 October 10 2014 - 2.1.9
 ===========================================================

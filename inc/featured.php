@@ -34,14 +34,15 @@ $featured = new WP_Query(
 					jQuery('#flexslider-featured').flexslider({
 						animation: "slide",
 						useCSS: false, // Fix iPad flickering issue
-						slideshow: false,
+						slideshow: true,
 						directionNav: true,
 						controlNav: true,
 						pauseOnHover: true,
-						slideshowSpeed: 7000,
-						animationSpeed: 400,
-						smoothHeight: true,
-						touch: false
+						slideshowSpeed: 10000,
+						animationSpeed: 300,
+						randomize: <?php if (ot_get_option('featured-posts-randomize') != 'off') { echo 'true'; } else { echo 'false'; } ?>,
+						touch: false,
+				        smoothHeight: true
 					});
 					
 				}
@@ -59,5 +60,4 @@ $featured = new WP_Query(
 		</ul>
 	</div><!--/.featured-->
 	
-<?php endif; ?>
-<?php wp_reset_postdata(); ?>
+<?php endif; wp_reset_query(); ?>
